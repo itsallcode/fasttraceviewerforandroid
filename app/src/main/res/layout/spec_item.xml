@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="spec_item"
+                  type="itsallcode.org.fasttraceviewerforandroid.model.SpecItem"/>
+        <variable name="callback"
+                  type="itsallcode.org.fasttraceviewerforandroid.ui.speclist.SpecClickCallback"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/fast_trace_item_min_height"
+        android:onClick="@{() ->  callback.onClick(spec_item)}"
+        android:orientation="horizontal"
+        android:layout_marginStart="@dimen/item_horizontal_margin"
+        android:layout_marginEnd="@dimen/item_horizontal_margin"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_marginStart="@dimen/item_horizontal_margin"
+            android:layout_marginEnd="@dimen/item_horizontal_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/spec_item"
+                android:text="@{spec_item.item.title}"/>
+            <TextView
+                    android:id="@+id/description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/spec_item"
+                    android:layout_below="@id/title"
+                    android:textSize="@dimen/creation_date_height"
+                    android:text="@{spec_item.item.description}"/>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</layout>

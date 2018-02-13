@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="isLoading"
+            type="boolean" />
+        <variable name="view_model"
+                  type="itsallcode.org.fasttraceviewerforandroid.viewmodel.FastTraceViewModel"/>
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout android:layout_width="match_parent"
+                                                     android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/cardview_light_background"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/loading_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/loading_repo"
+            android:textAlignment="center"
+            app:visibleGone="@{isLoading}"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fast_trace_item_list"
+            android:contentDescription="@string/fast_trace_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="LinearLayoutManager"
+            app:visibleGone="@{!isLoading}"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="wrap_content"
+                  android:orientation="vertical"
+                  android:layout_gravity="bottom|end"
+                  android:layout_height="wrap_content">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@android:drawable/ic_input_add"
+            android:onClick="@{() ->  view_model.addFastTraceEntity()}"/>
+    </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

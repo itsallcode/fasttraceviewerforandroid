@@ -4,6 +4,9 @@ import android.app.Application;
 
 import itsallcode.org.fasttraceviewerforandroid.dagger.components.AppComponent;
 import itsallcode.org.fasttraceviewerforandroid.dagger.components.DaggerAppComponent;
+import itsallcode.org.fasttraceviewerforandroid.dagger.modules.AppModule;
+import itsallcode.org.fasttraceviewerforandroid.dagger.modules.CacheModule;
+import itsallcode.org.fasttraceviewerforandroid.dagger.modules.ContentModule;
 import itsallcode.org.fasttraceviewerforandroid.dagger.modules.FastTraceRepositoryModule;
 
 /**
@@ -29,6 +32,9 @@ public class FastTraceApp extends Application {
         setInstance(this);
         applicationComponent = DaggerAppComponent
                 .builder()
+                .appModule(new AppModule(this))
+                .contentModule(new ContentModule(this))
+                .cacheModule(new CacheModule(this))
                 .fastTraceRepositoryModule(new FastTraceRepositoryModule(this)).build();
     }
 

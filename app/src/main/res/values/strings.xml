@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">FastTraceViewerForAndroid</string>
+    <string name="loading_repo">Loading repository...</string>
+    <string name="fast_trace_list">Available fast trace entities</string>
+    <string name="fast_trace_item">FastTrace repo</string>
+    <string name="spec_item_list">Available specification items</string>
+    <string name="spec_item">Specification item</string>
 </resources>
