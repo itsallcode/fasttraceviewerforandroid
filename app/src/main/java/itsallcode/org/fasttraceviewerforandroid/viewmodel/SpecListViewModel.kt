@@ -13,7 +13,7 @@ open class SpecListViewModel : ViewModel() {
 
     @Inject lateinit var fastTraceRepository : FastTraceRepository
 
-    fun getSpecListItems(fastTraceEntityId : Long) : LiveData<List<SpecItem>> {
+    fun getSpecListItems(fastTraceEntityId : Long?) : LiveData<SpecItem> {
         return fastTraceRepository.getAllSpecItems(fastTraceEntityId)
     }
 

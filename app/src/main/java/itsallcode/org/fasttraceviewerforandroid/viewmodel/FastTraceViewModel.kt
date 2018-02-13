@@ -40,10 +40,8 @@ open class FastTraceViewModel : ViewModel() {
             val name = contentAccess.getName(it)
             val path = cacheAccess.copyToCache(inputStream).toPath()
             Log.d(TAG, "Importing: " + path)
-            val specItems : List<SpecificationItem> = ImporterService().importFile(path)
-            java.nio.file.Files.deleteIfExists(path)
             fastTraceRepository.add(name ?: "Unknown",
-                    Calendar.getInstance(), specItems)
+                    Calendar.getInstance(), path)
         }
     }
 

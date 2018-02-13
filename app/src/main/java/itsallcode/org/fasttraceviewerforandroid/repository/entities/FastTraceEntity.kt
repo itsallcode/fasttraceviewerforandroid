@@ -3,6 +3,7 @@ package itsallcode.org.fasttraceviewerforandroid.repository.entities
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import itsallcode.org.fasttraceviewerforandroid.model.FastTraceItem
+import java.nio.file.Path
 import java.util.*
 
 /**
@@ -10,7 +11,8 @@ import java.util.*
  */
 
 @Entity
-class FastTraceEntity(override val name: String, override val creationDate: Calendar) : FastTraceItem {
+class FastTraceEntity(override val name: String, override val creationDate: Calendar, val path : Path)
+    : FastTraceItem {
     @PrimaryKey(autoGenerate = true)
     override var id: Long? = null
 }

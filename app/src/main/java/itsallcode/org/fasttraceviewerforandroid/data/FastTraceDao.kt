@@ -17,6 +17,9 @@ interface FastTraceDao {
     @get:Query("SELECT * FROM FastTraceEntity")
     val all: LiveData<List<FastTraceEntity>>
 
+    @Query("SELECT * FROM FastTraceEntity WHERE id=:fastTraceId")
+    fun getSpecific(fastTraceId : Long) : LiveData<FastTraceEntity>
+
     /**
      * Inserts new FastDataEntity
      * @param entity Entities

@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="spec_item"
-                  type="itsallcode.org.fasttraceviewerforandroid.model.SpecItem"/>
+                  type="openfasttrack.core.LinkedSpecificationItem"/>
         <variable name="callback"
                   type="itsallcode.org.fasttraceviewerforandroid.ui.speclist.SpecClickCallback"/>
     </data>

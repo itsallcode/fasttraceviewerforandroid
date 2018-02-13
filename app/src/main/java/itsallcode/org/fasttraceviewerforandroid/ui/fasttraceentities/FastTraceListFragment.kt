@@ -43,9 +43,9 @@ class FastTraceListFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        mBinding = DataBindingUtil.inflate(inflater!!, R.layout.fast_trace_list_fragment, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fast_trace_list_fragment, container, false)
 
         mFastTraceEntityAdapter = FastTraceEntityAdapter(mFastTraceClickCallback)
         mBinding?.fastTraceItemList?.adapter = mFastTraceEntityAdapter

@@ -18,6 +18,7 @@ import itsallcode.org.fasttraceviewerforandroid.databinding.SpecListFragmentBind
 import itsallcode.org.fasttraceviewerforandroid.model.SpecItem
 import itsallcode.org.fasttraceviewerforandroid.ui.StartActivity
 import itsallcode.org.fasttraceviewerforandroid.viewmodel.SpecListViewModel
+import openfasttrack.core.LinkedSpecificationItem
 
 
 /**
@@ -33,16 +34,17 @@ class SpecListFragment : Fragment() {
     private var mViewModel : SpecListViewModel? = null
 
     private val mSpecClickCallback = object : SpecClickCallback {
-        override fun onClick(specItem: SpecItem) {
+        override fun onClick(item: LinkedSpecificationItem) {
             if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-                (activity as StartActivity).show(specItem)
+                (activity as StartActivity).show(item)
             }
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        mBinding = DataBindingUtil.inflate(inflater!!, R.layout.spec_list_fragment, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.spec_list_fragment, container, false)
 
         mSpecAdapter = SpecAdapter(mSpecClickCallback)
         mBinding?.specItemList?.adapter = mSpecAdapter
@@ -61,12 +63,11 @@ class SpecListFragment : Fragment() {
 
     private fun subscribeUi(viewModel: SpecListViewModel) {
         // Update the list when the data changes
-        viewModel.getSpecListItems(arguments.getLong(KEY_FAST_TRACE_ENTITY)).observe(this, Observer{updateSpecList(it)})
+        viewModel.getSpecListItems(arguments?.getLong(KEY_FAST_TRACE_ENTITY)).observe(this, Observer { updateSpecList(it) })
         mBinding?.viewModel = viewModel
     }
 
-    private fun updateSpecList(specList : List<SpecItem>?) {
-        Log.d(TAG, "updateSpecList: size = " + specList?.size)
+    private fun updateSpecList(specList : SpecItem?) {
         if (specList != null) {
             mBinding!!.isLoading = false
             mSpecAdapter!!.setSpecItemList(specList)

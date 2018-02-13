@@ -38,41 +38,9 @@ class FastTraceRepositoryModule(application: Application) {
         return fastTraceDatabase.fastTraceDao()
     }
 
-    @Singleton
-    @Provides
-    internal fun providesSpecificationItemDao(fastTraceDatabase: FastTraceDatabase): SpecificationItemDao {
-        return fastTraceDatabase.specificationItemDao()
-    }
-
-    @Singleton
-    @Provides
-    internal fun providesSpecificationItemCoverDao(fastTraceDatabase: FastTraceDatabase): SpecificationItemCoverDao {
-        return fastTraceDatabase.specificationItemCoverDao()
-    }
-
-    @Singleton
-    @Provides
-    internal fun providesFastTraceMappingDao(fastTraceDatabase: FastTraceDatabase): FastTraceSpecItemMappingDao {
-        return fastTraceDatabase.fastTraceMappingDao()
-    }
-
-    @Singleton
-    @Provides
-    internal fun providesDependentSpecificationItemDao(fastTraceDatabase: FastTraceDatabase): DependentSpecificationItemDao {
-        return fastTraceDatabase.dependentSpecificationItemDao()
-    }
-
     @Provides
     @Singleton
-    internal fun providesRepository(fastTraceDao: FastTraceDao,
-                                    specificationItemDao: SpecificationItemDao,
-                                    specificationItemCoverDao: SpecificationItemCoverDao,
-                                    fastTraceMappingDao: FastTraceSpecItemMappingDao,
-                                    dependentSpecificationItemDao: DependentSpecificationItemDao): FastTraceRepository {
-        return FastTraceDataSource(fastTraceDao,
-                specificationItemDao,
-                specificationItemCoverDao,
-                fastTraceMappingDao,
-                dependentSpecificationItemDao)
+    internal fun providesRepository(fastTraceDao: FastTraceDao): FastTraceRepository {
+        return FastTraceDataSource(fastTraceDao)
     }
 }

@@ -8,6 +8,7 @@ import itsallcode.org.fasttraceviewerforandroid.model.FastTraceItem
 import itsallcode.org.fasttraceviewerforandroid.model.SpecItem
 import itsallcode.org.fasttraceviewerforandroid.ui.fasttraceentities.FastTraceListFragment
 import itsallcode.org.fasttraceviewerforandroid.ui.speclist.SpecListFragment
+import openfasttrack.core.LinkedSpecificationItem
 
 class StartActivity : AppCompatActivity() {
 
@@ -39,7 +40,7 @@ class StartActivity : AppCompatActivity() {
                 }
     }
 
-    fun show(specItem: SpecItem) {
+    fun show(item: LinkedSpecificationItem) {
         //
         //        ProductFragment productFragment = ProductFragment.forProduct(product.getId());
         //
