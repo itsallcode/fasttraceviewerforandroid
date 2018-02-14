@@ -6,6 +6,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import itsallcode.org.fasttraceviewerforandroid.FastTraceApp
 import itsallcode.org.fasttraceviewerforandroid.databinding.SpecListFragmentBinding
 import itsallcode.org.fasttraceviewerforandroid.model.SpecItem
 import itsallcode.org.fasttraceviewerforandroid.ui.StartActivity
+import itsallcode.org.fasttraceviewerforandroid.util.setupSnackbar
 import itsallcode.org.fasttraceviewerforandroid.viewmodel.SpecListViewModel
 import openfasttrack.core.LinkedSpecificationItem
 
@@ -58,13 +60,17 @@ class SpecListFragment : Fragment() {
         mViewModel = ViewModelProviders.of(this).get(SpecListViewModel::class.java)
                 .apply {
                     FastTraceApp.getInstance().applicationComponent.inject(this)
-                    subscribeUi(this) }
+                    subscribeUi(this)}
     }
 
     private fun subscribeUi(viewModel: SpecListViewModel) {
         // Update the list when the data changes
-        viewModel.getSpecListItems(arguments?.getLong(KEY_FAST_TRACE_ENTITY)).observe(this, Observer { updateSpecList(it) })
+        viewModel.specItemsLoaded.observe(this, Observer { updateSpecList(it) })
+        mBinding!!.isLoading = true
+        view?.setupSnackbar(this@SpecListFragment,
+                viewModel.snackbarMessage, Snackbar.LENGTH_SHORT)
         mBinding?.viewModel = viewModel
+        viewModel.loadSpecListItems(arguments?.getLong(KEY_FAST_TRACE_ENTITY))
     }
 
     private fun updateSpecList(specList : SpecItem?) {

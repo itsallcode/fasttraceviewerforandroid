@@ -17,9 +17,11 @@ import itsallcode.org.fasttraceviewerforandroid.model.FastTraceItem
 import itsallcode.org.fasttraceviewerforandroid.repository.entities.FastTraceEntity
 import itsallcode.org.fasttraceviewerforandroid.viewmodel.FastTraceViewModel
 import android.content.Intent
+import android.support.design.widget.Snackbar
 import android.util.Log
 import itsallcode.org.fasttraceviewerforandroid.FastTraceApp
 import itsallcode.org.fasttraceviewerforandroid.ui.StartActivity
+import itsallcode.org.fasttraceviewerforandroid.util.setupSnackbar
 
 
 /**
@@ -65,6 +67,8 @@ class FastTraceListFragment : Fragment() {
         // Update the list when the data changes
         viewModel.getFastTraceItems().observe(this, Observer{updateFastTraceEntities(it)})
         viewModel.newTaskEvent.observe(this, Observer { openFile() })
+        view?.setupSnackbar(this@FastTraceListFragment,
+                viewModel.snackbarMessage, Snackbar.LENGTH_SHORT)
         mBinding?.viewModel = viewModel
     }
 
@@ -91,7 +95,7 @@ class FastTraceListFragment : Fragment() {
         // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
         // To search for all documents available via installed storage providers,
         // it would be "*/*".
-        intent.type = "text/xml"
+        intent.type = "*/*"
 
         startActivityForResult(intent, READ_REQUEST_CODE)
     }

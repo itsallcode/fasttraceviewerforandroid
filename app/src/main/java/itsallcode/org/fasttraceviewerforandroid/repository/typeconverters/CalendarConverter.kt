@@ -11,7 +11,7 @@ class CalendarConverter {
 
     @TypeConverter
     fun fromCalendar(value: Calendar?): Long? {
-        return if (value == null) null else value.timeInMillis
+        return value?.timeInMillis
     }
 
     @TypeConverter

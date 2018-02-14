@@ -10,6 +10,7 @@ import javax.inject.Inject
 import itsallcode.org.fasttraceviewerforandroid.data.FastTraceDao
 import itsallcode.org.fasttraceviewerforandroid.model.SpecItem
 import itsallcode.org.fasttraceviewerforandroid.repository.entities.FastTraceEntity
+import openfasttrack.core.LinkedSpecificationItem
 import openfasttrack.core.Linker
 import openfasttrack.importer.ImporterService
 import java.nio.file.Path
@@ -20,40 +21,33 @@ import java.util.Calendar
  */
 
 class FastTraceDataSource @Inject
-constructor(val mFastTraceDao: FastTraceDao) : FastTraceRepository {
+constructor(private val mFastTraceDao: FastTraceDao) : FastTraceRepository {
+    private var cache = Pair<Long?, List<LinkedSpecificationItem>?>(null, null)
 
     override fun add(name: String, creationData: Calendar, path : Path) {
         val entity = FastTraceEntity(name, creationData, path)
         mFastTraceDao.insert(entity)
     }
 
-    override fun getAllSpecItems(faceTraceEntityId : Long?) : LiveData<SpecItem>{
-        val observableItem: MediatorLiveData<SpecItem> = MediatorLiveData()
-        if (faceTraceEntityId != null) {
-            observableItem.value = null
-            // observe the changes of the products from the database and forward them
-            observableItem.addSource(
-                    mFastTraceDao.getSpecific(faceTraceEntityId),
-                    { updateSpecItems(it, observableItem) })
-        }
-        return observableItem
-    }
-
-    private fun updateSpecItems(item : FastTraceEntity?,
-                                merger : MediatorLiveData<SpecItem>) {
-        Log.d(TAG, "updateSpecItems: path=" + item?.path)
-        item?.let {
-            val p = Pair(it, merger)
-            async(p) {
-                val rawData = ImporterService().importFile(p.first.path)
-                val linkedData = Linker(rawData).link()
-                p.second.postValue(SpecItem(p.first.id ?: 0, linkedData))
-            }
-        }
+    override fun getFastTraceEntity(faceTraceEntityId : Long?) : FastTraceEntity? {
+        return if (faceTraceEntityId == null) null else mFastTraceDao.getSpecific(faceTraceEntityId)
     }
 
     override val allFastTraceItems : LiveData<List<FastTraceEntity>>
         get() = mFastTraceDao.all
+
+    override fun tryCache(faceTraceEntityId: Long?) : List<LinkedSpecificationItem>? {
+        if (cache.first != null && faceTraceEntityId != null && cache.first == faceTraceEntityId) {
+            return cache.second
+        }
+        return null
+    }
+    override fun cacheSpecItems(faceTraceEntityId: Long?, items : List<LinkedSpecificationItem>) {
+        if (faceTraceEntityId != null) {
+            cache = Pair(faceTraceEntityId, items)
+        }
+    }
+
 
     companion object {
         private const val TAG = "FastTraceDataSource"
