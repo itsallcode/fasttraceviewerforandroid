@@ -11,6 +11,7 @@ import itsallcode.org.fasttraceviewerforandroid.data.*
 import itsallcode.org.fasttraceviewerforandroid.repository.FastTraceDataSource
 import itsallcode.org.fasttraceviewerforandroid.repository.FastTraceDatabase
 import itsallcode.org.fasttraceviewerforandroid.repository.FastTraceRepository
+import java.nio.file.Paths
 
 @Module
 class FastTraceRepositoryModule(application: Application) {
@@ -21,7 +22,7 @@ class FastTraceRepositoryModule(application: Application) {
         mFastTraceDatabase = Room.databaseBuilder(
                 application,
                 FastTraceDatabase::class.java,
-                FastTraceDatabase.DATABASE_NAME)
+                Paths.get(application.cacheDir.absolutePath, FastTraceDatabase.DATABASE_NAME).toString())
                 .build()
 
     }
