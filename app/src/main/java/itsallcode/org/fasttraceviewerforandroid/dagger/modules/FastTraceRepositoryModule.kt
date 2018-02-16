@@ -24,7 +24,6 @@ class FastTraceRepositoryModule(application: Application) {
                 FastTraceDatabase::class.java,
                 Paths.get(application.cacheDir.absolutePath, FastTraceDatabase.DATABASE_NAME).toString())
                 .build()
-
     }
 
     @Singleton

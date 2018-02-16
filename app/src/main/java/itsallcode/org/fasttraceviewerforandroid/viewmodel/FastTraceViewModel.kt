@@ -4,17 +4,14 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import android.net.Uri
 import android.util.Log
-import com.uebensee.thomasu.fasttrackmobile.util.async
 import itsallcode.org.fasttraceviewerforandroid.R
 import itsallcode.org.fasttraceviewerforandroid.SingleLiveEvent
+import itsallcode.org.fasttraceviewerforandroid.platformaccess.AppExecutors
 import itsallcode.org.fasttraceviewerforandroid.platformaccess.CacheAccess
 import itsallcode.org.fasttraceviewerforandroid.platformaccess.ContentAccess
 import itsallcode.org.fasttraceviewerforandroid.repository.FastTraceRepository
 import itsallcode.org.fasttraceviewerforandroid.repository.entities.FastTraceEntity
-import openfasttrack.core.SpecificationItem
-import openfasttrack.importer.ImporterService
-import java.io.InputStream
-import java.util.*
+import java.util.Calendar
 import javax.inject.Inject
 
 /**
@@ -27,6 +24,7 @@ open class FastTraceViewModel : ViewModel() {
     @Inject lateinit var fastTraceRepository : FastTraceRepository
     @Inject lateinit var cacheAccess : CacheAccess
     @Inject lateinit var contentAccess : ContentAccess
+    @Inject lateinit var executors : AppExecutors
 
     fun getFastTraceItems() : LiveData<List<FastTraceEntity>> {
         return fastTraceRepository.allFastTraceItems
@@ -37,13 +35,13 @@ open class FastTraceViewModel : ViewModel() {
     }
 
     fun importFile(uri: Uri) {
-        async(uri) {
+        executors.bgExecutor.execute {
             showSnackbarMessage(R.string.copy_document)
-            val inputStream = contentAccess.open(it)
-            val name = contentAccess.getName(it)
-            val path = cacheAccess.copyToCache(inputStream, name).toPath()
+            val inputStream = contentAccess.open(uri)
+            val name = contentAccess.getName(uri)
+            val file = cacheAccess.copyToCache(inputStream, name)
+            val path = file.toPath()
             showSnackbarMessage(R.string.finish_copy_document)
-            Log.d(TAG, "Importing: " + path)
             fastTraceRepository.add(name ?: "Unknown",
                     Calendar.getInstance(), path)
         }
@@ -52,7 +50,6 @@ open class FastTraceViewModel : ViewModel() {
     private fun showSnackbarMessage(message: Int) {
         snackbarMessage.postValue(message)
     }
-
 
     companion object {
         private val TAG : String = "FastTraceViewModel"
