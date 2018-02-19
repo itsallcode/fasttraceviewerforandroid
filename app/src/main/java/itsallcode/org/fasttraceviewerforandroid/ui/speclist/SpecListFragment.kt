@@ -17,9 +17,7 @@ import itsallcode.org.fasttraceviewerforandroid.ui.model.TraceItem
 import itsallcode.org.fasttraceviewerforandroid.ui.StartActivity
 import itsallcode.org.fasttraceviewerforandroid.util.setupSnackbar
 import itsallcode.org.fasttraceviewerforandroid.viewmodel.SpecListViewModel
-import openfasttrack.core.LinkedSpecificationItem
 import android.view.*
-
 
 /**
  * Created by thomasu on 2/4/18.
@@ -77,7 +75,6 @@ class SpecListFragment : Fragment() {
     }
 
     private fun updateSpecList(traceList: TraceItem?) {
-        Log.d("setImageUri", "updateSpecList" )
         if (traceList != null) {
             mBinding!!.isLoading = false
             mSpecAdapter!!.setSpecItemList(traceList)
@@ -88,6 +85,18 @@ class SpecListFragment : Fragment() {
         // espresso does not know how to wait for data binding's loop so we execute changes
         // sync.
         mBinding!!.executePendingBindings()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.filter_defect -> {
+                item.isChecked = !item.isChecked
+                Log.d(TAG, "onOptionsItemSelected")
+                mViewModel?.filter(arguments?.getLong(KEY_FAST_TRACE_ENTITY), item.isChecked)
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
 

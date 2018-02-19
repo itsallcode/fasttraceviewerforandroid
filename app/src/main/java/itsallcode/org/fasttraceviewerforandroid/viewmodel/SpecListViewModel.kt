@@ -1,6 +1,7 @@
 package itsallcode.org.fasttraceviewerforandroid.viewmodel
 
 import android.arch.lifecycle.ViewModel
+import android.util.Log
 import itsallcode.org.fasttraceviewerforandroid.R
 import itsallcode.org.fasttraceviewerforandroid.SingleLiveEvent
 import itsallcode.org.fasttraceviewerforandroid.ui.model.TraceItem
@@ -26,10 +27,16 @@ open class SpecListViewModel : ViewModel() {
     val mTraceItemsLoaded: SingleLiveEvent<TraceItem> = SingleLiveEvent()
 
     fun loadSpecListItems(fastTraceEntityId: Long?) {
-        val cachedItems = fastTraceRepository.tryCache(fastTraceEntityId)
+        loadSpecListItems(fastTraceEntityId, false)
+    }
+
+    private fun loadSpecListItems(fastTraceEntityId: Long?, filterOn : Boolean) {
+        val cachedItems = fastTraceRepository.tryCache(fastTraceEntityId)?.run { applyFilter(this, filterOn) }
         if (fastTraceEntityId != null && cachedItems != null) {
-            val (specItems, statusIcon) = buildSpecItems(cachedItems)
-            mTraceItemsLoaded.value = TraceItem(fastTraceEntityId, specItems, statusIcon)
+            executors.bgExecutor.execute {
+                val (specItems, statusIcon) = buildSpecItems(cachedItems)
+                mTraceItemsLoaded.postValue(TraceItem(fastTraceEntityId, specItems, statusIcon))
+            }
         } else {
             executors.bgExecutor.execute {
                 val fastTraceEntity = fastTraceRepository.getFastTraceEntity(fastTraceEntityId)
@@ -37,12 +44,24 @@ open class SpecListViewModel : ViewModel() {
                     showSnackbarMessage(R.string.loading_document)
                     val rawData = ImporterService().importFile(it.path)
                     showSnackbarMessage(R.string.linking_document)
-                    val linkedData = Linker(rawData).link()
+                    val linkedData = Linker(rawData).link().run { applyFilter(this, filterOn) }
                     val (specItems, statusIcon) = buildSpecItems(linkedData)
+                    fastTraceRepository.cacheSpecItems(fastTraceEntityId, linkedData)
                     mTraceItemsLoaded.postValue(TraceItem(it.id ?: 0, specItems, statusIcon))
                 }
             }
         }
+    }
+
+    private fun applyFilter(items : List<LinkedSpecificationItem>, filterOn : Boolean) :
+        List<LinkedSpecificationItem> {
+        Log.d(TAG, "applyFilter")
+        return if (filterOn) items.stream().filter { it.isDefect }.collect(toList()) else items
+    }
+
+    fun filter(fastTraceEntityId: Long?, filterOn : Boolean) {
+        Log.d(TAG, "filter: fastTraceEntityId - " + fastTraceEntityId + " filterOn - " + filterOn )
+        loadSpecListItems(fastTraceEntityId, filterOn)
     }
 
     private fun buildSpecItems(linkedSpecificationItems : List<LinkedSpecificationItem>) : Pair<List<TraceItem.SpecItem>, Int> {
