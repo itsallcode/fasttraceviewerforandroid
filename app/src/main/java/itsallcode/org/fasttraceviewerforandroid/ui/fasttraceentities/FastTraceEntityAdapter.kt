@@ -25,7 +25,7 @@ import android.view.ViewGroup
 
 import itsallcode.org.fasttraceviewerforandroid.R
 import itsallcode.org.fasttraceviewerforandroid.databinding.FastTraceItemBinding
-import itsallcode.org.fasttraceviewerforandroid.model.FastTraceItem
+import itsallcode.org.fasttraceviewerforandroid.ui.model.FastTraceItem
 
 internal class FastTraceEntityAdapter internal constructor(private val mFastTraceClickCallback: FastTraceClickCallback?)
     : RecyclerView.Adapter<FastTraceEntityAdapter.FastTraceViewHolder>() {

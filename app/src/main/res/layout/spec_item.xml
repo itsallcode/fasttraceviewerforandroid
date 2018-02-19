@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="spec_item"
-                  type="openfasttrack.core.LinkedSpecificationItem"/>
+                  type="itsallcode.org.fasttraceviewerforandroid.ui.model.TraceItem.SpecItem"/>
         <variable name="callback"
                   type="itsallcode.org.fasttraceviewerforandroid.ui.speclist.SpecClickCallback"/>
     </data>
@@ -30,15 +30,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/spec_item"
-                android:text="@{spec_item.item.title}"/>
+                android:text="@{spec_item.title}"/>
             <TextView
                     android:id="@+id/description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/spec_item"
                     android:layout_below="@id/title"
-                    android:textSize="@dimen/creation_date_height"
-                    android:text="@{spec_item.item.description}"/>
+                    android:textSize="@dimen/description_height"
+                    android:text="@{spec_item.description}"/>
+            <ImageView android:id="@+id/status_icon"
+                       android:layout_width="@dimen/specitem_icon_width"
+                       android:contentDescription="@string/spec_item_icon_content_description"
+                       android:layout_height="@dimen/specitem_icon_height"
+                       android:src="@{spec_item.icon}"
+                       android:layout_below="@id/title"
+                       android:layout_alignParentEnd="true"/>
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

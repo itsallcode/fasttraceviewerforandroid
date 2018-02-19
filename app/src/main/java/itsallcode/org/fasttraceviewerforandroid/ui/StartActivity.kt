@@ -4,9 +4,9 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 
 import itsallcode.org.fasttraceviewerforandroid.R
-import itsallcode.org.fasttraceviewerforandroid.model.FastTraceItem
-import itsallcode.org.fasttraceviewerforandroid.model.SpecItem
+import itsallcode.org.fasttraceviewerforandroid.ui.model.FastTraceItem
 import itsallcode.org.fasttraceviewerforandroid.ui.fasttraceentities.FastTraceListFragment
+import itsallcode.org.fasttraceviewerforandroid.ui.model.TraceItem
 import itsallcode.org.fasttraceviewerforandroid.ui.speclist.SpecListFragment
 import openfasttrack.core.LinkedSpecificationItem
 
@@ -40,7 +40,7 @@ class StartActivity : AppCompatActivity() {
                 }
     }
 
-    fun show(item: LinkedSpecificationItem) {
+    fun show(item: TraceItem.SpecItem) {
         //
         //        ProductFragment productFragment = ProductFragment.forProduct(product.getId());
         //

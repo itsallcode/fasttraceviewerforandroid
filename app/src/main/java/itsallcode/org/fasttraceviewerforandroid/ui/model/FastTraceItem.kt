@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-package itsallcode.org.fasttraceviewerforandroid.model
+package itsallcode.org.fasttraceviewerforandroid.ui.model
 
-import openfasttrack.core.LinkedSpecificationItem
+import java.util.*
 
-data class SpecItem(val fastTraceEntityId: Long, val items: List<LinkedSpecificationItem>)
+interface FastTraceItem {
+    val id: Long?
+    val name: String
+    val creationDate: Calendar
+}

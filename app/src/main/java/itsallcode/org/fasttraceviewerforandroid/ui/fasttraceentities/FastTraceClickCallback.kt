@@ -17,7 +17,7 @@
 package itsallcode.org.fasttraceviewerforandroid.ui.fasttraceentities
 
 
-import itsallcode.org.fasttraceviewerforandroid.model.FastTraceItem
+import itsallcode.org.fasttraceviewerforandroid.ui.model.FastTraceItem
 
 interface FastTraceClickCallback {
     fun onClick(fastTraceItem: FastTraceItem)

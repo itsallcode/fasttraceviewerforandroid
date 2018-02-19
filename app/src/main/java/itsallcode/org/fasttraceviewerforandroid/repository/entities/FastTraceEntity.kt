@@ -2,7 +2,7 @@ package itsallcode.org.fasttraceviewerforandroid.repository.entities
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
-import itsallcode.org.fasttraceviewerforandroid.model.FastTraceItem
+import itsallcode.org.fasttraceviewerforandroid.ui.model.FastTraceItem
 import java.nio.file.Path
 import java.util.*
 

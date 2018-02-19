@@ -1,0 +1,4 @@
+<resources>
+    <string name="status_icon_content_description">Status Icon Image View</string>
+    <string name="spec_item_icon_content_description">Spec Icon Image View</string>
+</resources>

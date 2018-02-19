@@ -8,6 +8,10 @@
     <dimen name="fast_trace_item_min_height">100dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="creation_date_height">6dp</dimen>
+    <dimen name="description_height">8dp</dimen>
+
+    <dimen name="specitem_icon_height">15dp</dimen>
+    <dimen name="specitem_icon_width">15dp</dimen>
 
     <dimen name="comment_minHeight">64dp</dimen>
 </resources>

@@ -13,28 +13,41 @@
 
     <android.support.design.widget.CoordinatorLayout android:layout_width="match_parent"
                                                      android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/cardview_light_background"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/loading_speclist"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="@string/loading_repo"
-            android:textAlignment="center"
-            app:visibleGone="@{isLoading}"/>
+            android:background="@color/cardview_light_background"
+            android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/spec_item_list"
-            android:contentDescription="@string/spec_item_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="LinearLayoutManager"
-            app:visibleGone="@{!isLoading}"/>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/loading_speclist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/loading_repo"
+                android:textAlignment="center"
+                app:visibleGone="@{isLoading}"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/spec_item_list"
+                android:contentDescription="@string/spec_item_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="LinearLayoutManager"
+                app:visibleGone="@{!isLoading}"/>
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="wrap_content"
+                      android:orientation="vertical"
+                      android:layout_gravity="bottom|end"
+                      android:layout_height="wrap_content">
+            <ImageView
+                    android:id="@+id/status_icon"
+                    android:contentDescription="@string/status_icon_content_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/fab_margin"
+                    android:src="@{view_model.mTraceItemsLoaded.value.statusIcon}"/>
+        </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
 </layout>

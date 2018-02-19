@@ -24,14 +24,14 @@ import android.view.ViewGroup
 
 import itsallcode.org.fasttraceviewerforandroid.R
 import itsallcode.org.fasttraceviewerforandroid.databinding.SpecItemBinding
-import itsallcode.org.fasttraceviewerforandroid.model.SpecItem
+import itsallcode.org.fasttraceviewerforandroid.ui.model.TraceItem
 
 internal class SpecAdapter internal constructor(private val mSpecItemClickCallback: SpecClickCallback?)
     : RecyclerView.Adapter<SpecAdapter.SpecItemViewHolder>() {
 
-    internal var mSpecificationItems: SpecItem? = null
+    internal var mSpecificationItems: TraceItem? = null
 
-    fun setSpecItemList(specificationItems: SpecItem) {
+    fun setSpecItemList(specificationItems: TraceItem) {
         if (mSpecificationItems == null) {
             mSpecificationItems = specificationItems
             notifyItemRangeInserted(0, specificationItems.items.size)

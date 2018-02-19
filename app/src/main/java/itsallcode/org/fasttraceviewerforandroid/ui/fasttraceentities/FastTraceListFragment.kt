@@ -13,7 +13,7 @@ import android.view.ViewGroup
 
 import itsallcode.org.fasttraceviewerforandroid.R
 import itsallcode.org.fasttraceviewerforandroid.databinding.FastTraceListFragmentBinding
-import itsallcode.org.fasttraceviewerforandroid.model.FastTraceItem
+import itsallcode.org.fasttraceviewerforandroid.ui.model.FastTraceItem
 import itsallcode.org.fasttraceviewerforandroid.repository.entities.FastTraceEntity
 import itsallcode.org.fasttraceviewerforandroid.viewmodel.FastTraceViewModel
 import android.content.Intent

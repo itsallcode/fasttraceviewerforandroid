@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="fast_trace_item"
-                  type="itsallcode.org.fasttraceviewerforandroid.model.FastTraceItem"/>
+                  type="itsallcode.org.fasttraceviewerforandroid.ui.model.FastTraceItem"/>
         <variable name="callback"
                   type="itsallcode.org.fasttraceviewerforandroid.ui.fasttraceentities.FastTraceClickCallback"/>
     </data>

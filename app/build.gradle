@@ -18,6 +18,9 @@ android {
         }
 
     }
+    lintOptions {
+        abortOnError false
+    }
     dataBinding {
         enabled = true
     }
@@ -66,7 +69,6 @@ dependencies {
     // Unit test dependencies (JUnit, Mockito, Robolectric)
     testImplementation 'org.assertj:assertj-core:1.7.1'
     testImplementation 'org.mockito:mockito-core:2.13.0'
-    testImplementation 'org.apache.commons:commons-lang3:3.3.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
 }

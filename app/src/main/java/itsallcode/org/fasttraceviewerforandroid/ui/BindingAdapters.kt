@@ -18,9 +18,18 @@ package itsallcode.org.fasttraceviewerforandroid.ui
 
 import android.databinding.BindingAdapter
 import android.view.View
+import android.util.Log
+import android.widget.ImageView
 
 
 @BindingAdapter("visibleGone")
 fun showHide(view: View, show: Boolean) {
     view.visibility = if (show) View.VISIBLE else View.GONE
+}
+
+@BindingAdapter("android:src")
+fun setImageResource(imageView: ImageView, resource: Int) {
+    Log.d("setImageUri", "setImageUri: res - " + resource + " imageView - " + imageView.contentDescription )
+
+    imageView.setImageResource(resource)
 }
