@@ -1,4 +1,4 @@
-package itsallcode.org.fasttraceviewerforandroid.ui.speclist
+package itsallcode.org.fasttraceviewerforandroid.ui.specdetail
 
 import android.support.v4.app.Fragment
 import android.arch.lifecycle.Lifecycle
@@ -12,31 +12,32 @@ import android.util.Log
 
 import itsallcode.org.fasttraceviewerforandroid.R
 import itsallcode.org.fasttraceviewerforandroid.FastTraceApp
-import itsallcode.org.fasttraceviewerforandroid.databinding.SpecListFragmentBinding
-import itsallcode.org.fasttraceviewerforandroid.ui.model.TraceItem
 import itsallcode.org.fasttraceviewerforandroid.ui.StartActivity
 import itsallcode.org.fasttraceviewerforandroid.util.setupSnackbar
-import itsallcode.org.fasttraceviewerforandroid.viewmodel.SpecListViewModel
 import android.view.*
-import android.widget.Toast
+import itsallcode.org.fasttraceviewerforandroid.databinding.SpecDetailFragmentBinding
+import itsallcode.org.fasttraceviewerforandroid.ui.model.DetailedSpecItem
+import itsallcode.org.fasttraceviewerforandroid.viewmodel.SpecDetailViewModel
 import openfasttrack.core.SpecificationItemId
+import itsallcode.org.fasttraceviewerforandroid.ui.speclist.SpecClickCallback
+import itsallcode.org.fasttraceviewerforandroid.ui.speclist.SpecAdapter
 
 /**
- * Fragment responsible displaying SpecList item view.
+ * Created by thomasu on 2/4/18.
  */
 
-class SpecListFragment : Fragment() {
+class SpecDetailedFragment : Fragment() {
 
     private var mSpecAdapter: SpecAdapter? = null
 
-    private var mBinding: SpecListFragmentBinding? = null
+    private var mBinding: SpecDetailFragmentBinding? = null
 
-    private var mViewModel : SpecListViewModel? = null
+    private var mViewModel : SpecDetailViewModel? = null
 
     private val mSpecClickCallback = object : SpecClickCallback {
         override fun onClick(item: SpecificationItemId) {
             if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-                mViewModel?.mTraceItemsLoaded?.value?.fastTraceEntityId?.let {
+                mViewModel?.specItemLoaded?.value?.fastTraceEntityId?.let {
                     (activity as StartActivity).show(it, item)
                 }
             }
@@ -47,46 +48,38 @@ class SpecListFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.spec_list_fragment, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.spec_detail_fragment, container, false)
 
         mSpecAdapter = SpecAdapter(mSpecClickCallback)
-        mBinding?.specItemList?.adapter = mSpecAdapter
+        mBinding?.coveredSpecItemList?.adapter = mSpecAdapter
 
         return mBinding?.root
-    }
-
-    override fun onCreateOptionsMenu( menu : Menu, inflater : MenuInflater ) {
-        inflater.inflate(R.menu.spec_list_menu, menu)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.d(TAG, "onActivityCreated")
-        mViewModel = ViewModelProviders.of(this).get(SpecListViewModel::class.java)
+        mViewModel = ViewModelProviders.of(this).get(SpecDetailViewModel::class.java)
                 .apply {
                     FastTraceApp.getInstance().applicationComponent.inject(this)
                     subscribeUi(this)}
     }
 
-    private fun subscribeUi(viewModel: SpecListViewModel) {
+    private fun subscribeUi(viewModel: SpecDetailViewModel) {
         // Update the list when the data changes
-        viewModel.mTraceItemsLoaded.observe(this, Observer { updateSpecList(it) })
-        viewModel.errorMessage.observe(this, Observer { showErrorMessage(it) })
+        viewModel.specItemLoaded.observe(this, Observer { updateSpecList(it) })
         mBinding!!.isLoading = true
-        view?.setupSnackbar(this@SpecListFragment,
+        view?.setupSnackbar(this@SpecDetailedFragment,
                 viewModel.snackbarMessage, Snackbar.LENGTH_SHORT)
         mBinding?.viewModel = viewModel
-        viewModel.loadSpecListItems(arguments?.getLong(KEY_FAST_TRACE_ENTITY))
+        viewModel.loadSpecListItems(arguments?.getLong(KEY_FAST_TRACE_ENTITY),
+                arguments?.getString(KEY_FAST_SPEC_ID) ?: "")
     }
 
-    private fun showErrorMessage(error : String?) {
-        Toast.makeText(activity, error, Toast.LENGTH_LONG).show()
-    }
-
-    private fun updateSpecList(traceList: TraceItem?) {
-        if (traceList != null) {
+    private fun updateSpecList(detailedSpecItem: DetailedSpecItem?) {
+        if (detailedSpecItem != null) {
             mBinding!!.isLoading = false
-            mSpecAdapter!!.setSpecItemList(traceList.items)
+            mSpecAdapter!!.setSpecItemList(detailedSpecItem.coveredItems)
         } else {
             mBinding!!.isLoading = true
         }
@@ -96,27 +89,17 @@ class SpecListFragment : Fragment() {
         mBinding!!.executePendingBindings()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.filter_defect -> {
-                item.isChecked = !item.isChecked
-                Log.d(TAG, "onOptionsItemSelected")
-                mViewModel?.filter(arguments?.getLong(KEY_FAST_TRACE_ENTITY), item.isChecked)
-                return true
-            }
-            else -> return super.onOptionsItemSelected(item)
-        }
-    }
-
-
     companion object {
-        const val KEY_FAST_TRACE_ENTITY : String = "FT_ENTITY"
+        private const val KEY_FAST_TRACE_ENTITY : String = "FT_ENTITY"
+        private const val KEY_FAST_SPEC_ID : String = "SPEC_ID"
         private const val TAG = "SpecListFragment"
 
-        fun forFastTraceEntity(fastTraceEntity : Long): SpecListFragment {
-            val fragment = SpecListFragment()
+        fun forSpecItem(fastTraceEntity : Long, specificationItemId: SpecificationItemId)
+                : SpecDetailedFragment {
+            val fragment = SpecDetailedFragment()
             val args = Bundle()
             args.putLong(KEY_FAST_TRACE_ENTITY, fastTraceEntity)
+            args.putString(KEY_FAST_SPEC_ID, specificationItemId.toString())
             fragment.arguments = args
             return fragment
         }

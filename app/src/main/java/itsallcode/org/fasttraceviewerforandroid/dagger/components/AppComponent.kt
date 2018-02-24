@@ -5,6 +5,7 @@ import javax.inject.Singleton
 import dagger.Component
 import itsallcode.org.fasttraceviewerforandroid.dagger.modules.*
 import itsallcode.org.fasttraceviewerforandroid.viewmodel.FastTraceViewModel
+import itsallcode.org.fasttraceviewerforandroid.viewmodel.SpecDetailViewModel
 import itsallcode.org.fasttraceviewerforandroid.viewmodel.SpecListViewModel
 
 /**
@@ -19,4 +20,5 @@ import itsallcode.org.fasttraceviewerforandroid.viewmodel.SpecListViewModel
 interface AppComponent {
     fun inject(viewModel: FastTraceViewModel)
     fun inject(viewModel: SpecListViewModel)
+    fun inject(viewModel: SpecDetailViewModel)
 }

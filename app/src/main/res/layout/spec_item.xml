@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="spec_item"
-                  type="itsallcode.org.fasttraceviewerforandroid.ui.model.TraceItem.SpecItem"/>
+                  type="itsallcode.org.fasttraceviewerforandroid.ui.model.SpecItem"/>
         <variable name="callback"
                   type="itsallcode.org.fasttraceviewerforandroid.ui.speclist.SpecClickCallback"/>
     </data>
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/fast_trace_item_min_height"
-        android:onClick="@{() ->  callback.onClick(spec_item)}"
+        android:onClick="@{() ->  callback.onClick(spec_item.id)}"
         android:orientation="horizontal"
         android:layout_marginStart="@dimen/item_horizontal_margin"
         android:layout_marginEnd="@dimen/item_horizontal_margin"

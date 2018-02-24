@@ -16,9 +16,9 @@
 
 package itsallcode.org.fasttraceviewerforandroid.ui.speclist
 
-import itsallcode.org.fasttraceviewerforandroid.ui.model.TraceItem
+import openfasttrack.core.SpecificationItemId
 
 
 interface SpecClickCallback {
-    fun onClick(item: TraceItem.SpecItem)
+    fun onClick(item: SpecificationItemId)
 }

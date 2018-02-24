@@ -24,35 +24,36 @@ import android.view.ViewGroup
 
 import itsallcode.org.fasttraceviewerforandroid.R
 import itsallcode.org.fasttraceviewerforandroid.databinding.SpecItemBinding
+import itsallcode.org.fasttraceviewerforandroid.ui.model.SpecItem
 import itsallcode.org.fasttraceviewerforandroid.ui.model.TraceItem
 
 internal class SpecAdapter internal constructor(private val mSpecItemClickCallback: SpecClickCallback?)
     : RecyclerView.Adapter<SpecAdapter.SpecItemViewHolder>() {
 
-    internal var mSpecificationItems: TraceItem? = null
+    internal var mSpecificationItems: List<SpecItem>? = null
 
-    fun setSpecItemList(specificationItems: TraceItem) {
+    fun setSpecItemList(specificationItems: List<SpecItem>) {
         if (mSpecificationItems == null) {
             mSpecificationItems = specificationItems
-            notifyItemRangeInserted(0, specificationItems.items.size)
+            notifyItemRangeInserted(0, specificationItems.size)
         } else {
             val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                 override fun getOldListSize(): Int {
-                    return mSpecificationItems!!.items.size
+                    return mSpecificationItems!!.size
                 }
 
                 override fun getNewListSize(): Int {
-                    return specificationItems.items.size
+                    return specificationItems.size
                 }
 
                 override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                    return mSpecificationItems?.items?.get(oldItemPosition)?.id ==
-                            specificationItems.items[newItemPosition].id
+                    return mSpecificationItems?.get(oldItemPosition)?.id ==
+                            specificationItems[newItemPosition].id
                 }
 
                 override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                    val newFastTraceItem = specificationItems.items[newItemPosition]
-                    val oldFastTraceItem = mSpecificationItems!!.items[oldItemPosition]
+                    val newFastTraceItem = specificationItems[newItemPosition]
+                    val oldFastTraceItem = mSpecificationItems!![oldItemPosition]
                     return newFastTraceItem.id == oldFastTraceItem.id
                 }
             })
@@ -70,12 +71,12 @@ internal class SpecAdapter internal constructor(private val mSpecItemClickCallba
     }
 
     override fun onBindViewHolder(holder: SpecItemViewHolder, position: Int) {
-        holder.binding.specItem = mSpecificationItems!!.items[position]
+        holder.binding.specItem = mSpecificationItems!![position]
         holder.binding.executePendingBindings()
     }
 
     override fun getItemCount(): Int {
-        return mSpecificationItems?.items?.size ?: 0
+        return mSpecificationItems?.size ?: 0
     }
 
     internal class SpecItemViewHolder(val binding: SpecItemBinding) : RecyclerView.ViewHolder(binding.root)

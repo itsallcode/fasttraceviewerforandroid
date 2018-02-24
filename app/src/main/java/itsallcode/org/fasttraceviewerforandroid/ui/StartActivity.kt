@@ -6,9 +6,9 @@ import android.os.Bundle
 import itsallcode.org.fasttraceviewerforandroid.R
 import itsallcode.org.fasttraceviewerforandroid.ui.model.FastTraceItem
 import itsallcode.org.fasttraceviewerforandroid.ui.fasttraceentities.FastTraceListFragment
-import itsallcode.org.fasttraceviewerforandroid.ui.model.TraceItem
+import itsallcode.org.fasttraceviewerforandroid.ui.specdetail.SpecDetailedFragment
 import itsallcode.org.fasttraceviewerforandroid.ui.speclist.SpecListFragment
-import openfasttrack.core.LinkedSpecificationItem
+import openfasttrack.core.SpecificationItemId
 
 class StartActivity : AppCompatActivity() {
 
@@ -27,7 +27,7 @@ class StartActivity : AppCompatActivity() {
         }
     }
 
-    /** Shows the product detail fragment  */
+    /** Shows the spec list fragment  */
     fun show(fastTraceItem: FastTraceItem) {
 
                 fastTraceItem.id?.let {
@@ -40,14 +40,13 @@ class StartActivity : AppCompatActivity() {
                 }
     }
 
-    fun show(item: TraceItem.SpecItem) {
-        //
-        //        ProductFragment productFragment = ProductFragment.forProduct(product.getId());
-        //
-        //        getSupportFragmentManager()
-        //                .beginTransaction()
-        //                .addToBackStack("product")
-        //                .replace(R.id.fragment_container,
-        //                        productFragment, null).commit();
+    fun show(fastTraceId : Long, specificationItemId: SpecificationItemId) {
+
+        val specDetailedFragment = SpecDetailedFragment.forSpecItem(fastTraceId, specificationItemId)
+        supportFragmentManager
+                .beginTransaction()
+                .addToBackStack("entity")
+                .replace(R.id.fragment_container,
+                        specDetailedFragment, null).commit()
     }
 }

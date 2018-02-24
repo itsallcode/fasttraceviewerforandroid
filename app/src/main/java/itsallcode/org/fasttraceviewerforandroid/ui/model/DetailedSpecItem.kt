@@ -16,4 +16,8 @@
 
 package itsallcode.org.fasttraceviewerforandroid.ui.model
 
-data class TraceItem(val fastTraceEntityId: Long, val items: List<SpecItem>, val statusIcon : Int)
+import openfasttrack.core.LinkedSpecificationItem
+import openfasttrack.core.SpecificationItemId
+
+data class DetailedSpecItem(val fastTraceEntityId: Long, val item: LinkedSpecificationItem,
+                            val coveredItems : List<SpecItem>)
