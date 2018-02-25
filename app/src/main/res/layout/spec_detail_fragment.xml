@@ -19,31 +19,39 @@
             android:background="@color/cardview_light_background"
             android:orientation="vertical">
 
+            <TextView
+                    android:id="@+id/loading_speclist"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="@string/loading_repo"
+                    android:textAlignment="center"
+                    app:visibleGone="@{isLoading}"/>
+
             <include layout="@layout/detail_text"
-                     android:id="@+id/buttons"
                      app:title="@{@string/spec_title}"
                      app:text="@{view_model.specItemLoaded.value.item.item.title}"/>
+            <include layout="@layout/divider"/>
             <include layout="@layout/detail_text"
-                     android:id="@+id/buttons"
                      app:title="@{@string/spec_description}"
                      app:text="@{view_model.specItemLoaded.value.item.description}"/>
 
-            <TextView
-                android:id="@+id/loading_speclist"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="@string/loading_repo"
-                android:textAlignment="center"
-                app:visibleGone="@{isLoading}"/>
+            <android.support.v4.view.ViewPager
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/covered_spec_item_list"
-                android:contentDescription="@string/covered_spec_item_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layoutManager="LinearLayoutManager"
-                app:visibleGone="@{!isLoading}"/>
+                <android.support.v4.view.PagerTitleStrip
+                        android:id="@+id/pager_title_strip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:background="#33b5e5"
+                        android:textColor="#fff"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp" />
+            </android.support.v4.view.ViewPager>
         </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
 </layout>

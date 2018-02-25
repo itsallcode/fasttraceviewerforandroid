@@ -11,6 +11,6 @@
     <string name="linking_document">Linking&#x2026;</string>
     <string name="filter_defect">Filter defect items</string>
     <string name="covered_spec_item_list">Covered specification items</string>
-    <string name="spec_title">Specification Title</string>
-    <string name="spec_description">Specification Description</string>
+    <string name="spec_title">Title</string>
+    <string name="spec_description">Description</string>
 </resources>

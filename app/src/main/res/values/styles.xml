@@ -8,8 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="BlueText" parent="@android:style/TextAppearance">
+    <style name="SpecItemHeading" parent="@android:style/TextAppearance">
         <item name="android:textColor">#2020CF</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
 </resources>

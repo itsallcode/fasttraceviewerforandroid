@@ -1,5 +1,6 @@
 package itsallcode.org.fasttraceviewerforandroid.viewmodel
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import itsallcode.org.fasttraceviewerforandroid.R
 import itsallcode.org.fasttraceviewerforandroid.SingleLiveEvent
@@ -9,6 +10,7 @@ import itsallcode.org.fasttraceviewerforandroid.ui.model.DetailedSpecItem
 import itsallcode.org.fasttraceviewerforandroid.ui.model.SpecItem
 import openfasttrack.core.*
 import openfasttrack.importer.ImporterService
+import java.util.*
 import java.util.stream.Collectors.toList
 import javax.inject.Inject
 
@@ -24,12 +26,17 @@ open class SpecDetailViewModel : ViewModel() {
 
     val snackbarMessage = SingleLiveEvent<Int>()
     val specItemLoaded: SingleLiveEvent<DetailedSpecItem> = SingleLiveEvent()
+    val specItemDependencyListsLoadedMap =
+            EnumMap<LinkStatus, MutableLiveData<List<SpecItem>>>(LinkStatus::class.java)
+    init {
+        LinkStatus.values().forEach { it -> specItemDependencyListsLoadedMap[it] = MutableLiveData() }
+    }
 
     fun loadSpecListItems(fastTraceEntityId: Long?, specItemId: String) {
         val cachedItems = fastTraceRepository.tryCache(fastTraceEntityId)
         if (fastTraceEntityId != null && cachedItems != null) {
             executors.bgExecutor.execute {
-                specItemLoaded.postValue(buildSpecItem(fastTraceEntityId, cachedItems, specItemId))
+                notify(fastTraceEntityId, cachedItems, specItemId)
             }
         } else {
             executors.bgExecutor.execute {
@@ -40,24 +47,34 @@ open class SpecDetailViewModel : ViewModel() {
                     showSnackbarMessage(R.string.linking_document)
                     val linkedData = Linker(rawData).link()
                     fastTraceRepository.cacheSpecItems(fastTraceEntityId, linkedData)
-
-                    specItemLoaded.postValue(buildSpecItem(fastTraceEntityId,
-                            linkedData, specItemId))
+                    notify(fastTraceEntityId, linkedData, specItemId)
                 }
             }
         }
     }
 
-    private fun buildSpecItem(fastTraceEntityId: Long?,
-                              linkedSpecificationItems : List<LinkedSpecificationItem>,
-                              specItemId : String) : DetailedSpecItem? {
+    private fun notify(fastTraceEntityId: Long?,
+                       items : List<LinkedSpecificationItem>,
+                       specItemId: String) {
         val linkedSpecificationItem =
-                linkedSpecificationItems.find { it -> it.id == SpecificationItemId.parseId(specItemId) }
+                items.find { it -> it.id == SpecificationItemId.parseId(specItemId) }
+
+        specItemLoaded.postValue(buildSpecItem(fastTraceEntityId, linkedSpecificationItem))
+        LinkStatus.values().forEach {
+            val linkSpecItems = linkedSpecificationItem?.getLinksByStatus(it)
+            if (linkSpecItems != null) {
+                specItemDependencyListsLoadedMap[it]?.postValue(buildSpecItems(linkSpecItems))
+            }
+        }
+
+    }
+
+    private fun buildSpecItem(fastTraceEntityId: Long?,
+                              linkedSpecificationItem : LinkedSpecificationItem?)
+            : DetailedSpecItem? {
         if (linkedSpecificationItem != null && fastTraceEntityId != null) {
             return DetailedSpecItem(fastTraceEntityId,
-                    linkedSpecificationItem,
-                    buildSpecItems(
-                            linkedSpecificationItem.getLinksByStatus(LinkStatus.COVERS)))
+                    linkedSpecificationItem)
         }
         return null
     }
