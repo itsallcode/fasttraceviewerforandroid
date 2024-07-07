@@ -1,5 +1,7 @@
 # FastTraceViewerForAndroid
 
+# ⚠️ This project is deprecated ⚠️
+
 Simple viewer for open fast trace content.
 It uses openfasttrace's own import classes, so it should support
 all file formats openfasttrace itself supports.
